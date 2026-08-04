@@ -1,10 +1,10 @@
-# Rippling AI Platform — Agent Infrastructure Demo
+# Agent Runtime — Enterprise AI Agent Infrastructure Demo
 
 <img src="https://img.shields.io/badge/Python-3.11-blue" alt="Python">
 <img src="https://img.shields.io/badge/Kubernetes-Ready-green" alt="Kubernetes">
-<img src="https://img.shields.io/badge/Status-Production%20Grade-success" alt="Production Grade">
+<img src="https://img.shields.io/badge/Status-Reference%20Implementation-success" alt="Reference Implementation">
 
-A production-grade demonstration of AI agent infrastructure: autonomous workflows, event streaming, observability, and Kubernetes orchestration. Built to showcase the exact patterns Rippling's AI Platform team is hiring for.
+A reference implementation of enterprise AI agent infrastructure: autonomous workflow agents, event streaming, observability, and Kubernetes orchestration. Built as an architecture study of the patterns production AI-platform teams use — background agents, event-sourced audit trails, permission-aware execution, and self-healing systems.
 
 ## Architecture
 
@@ -41,9 +41,9 @@ A production-grade demonstration of AI agent infrastructure: autonomous workflow
 
 ```bash
 # 1. Clone
-git clone <repo-url> && cd rippling-demo
+git clone https://github.com/imperator-clawdius/agent-runtime-demo.git && cd agent-runtime-demo
 
-# 2. Set your OpenAI key
+# 2. Set your LLM key
 export OPENAI_API_KEY="sk-..."
 
 # 3. Launch full stack
@@ -66,7 +66,7 @@ open http://localhost:9090  # Prometheus
 
 ```bash
 # Build image
-docker build -t rippling-demo:latest .
+docker build -t agent-runtime-demo:latest .
 
 # Deploy
 kubectl apply -f k8s/deployment.yaml
@@ -95,16 +95,11 @@ kubectl scale deployment ai-agent --replicas=5
 - **Kubernetes**: Production-grade deployment with health checks, resource limits, replicas
 - **Self-Healing**: `/agent/observe` endpoint detects failures and suggests root causes
 - **Permission-Aware**: Designed with enterprise permissions model in mind
+- **Workflow Patterns**: Classification and routing for onboarding, payroll, compliance, and approval flows
 
-## Why Rippling?
+## Why This Exists
 
-This project mirrors the exact architecture Rippling's AI Platform team is building:
-- Background agents for workflow automation
-- Evaluation frameworks and feedback loops
-- Data pipelines and self-healing systems
-- Permissions, controls, approvals, and auditability
-
-I built this to demonstrate that I understand the problem space — not just the buzzwords.
+This repo is an honest study of how enterprise AI platforms are structured — agents scoped to single jobs, events as the audit backbone, metrics as the source of truth, and deployments that survive restarts. It's the pattern set I run in production daily (multi-agent orchestration with scoped tools and autonomy gates) distilled into a clean, runnable reference. No demo theater — the same architectural decisions apply whether you're automating HR workflows or any other domain.
 
 ---
 

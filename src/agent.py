@@ -1,8 +1,9 @@
 """
-Rippling AI Platform Demo — Autonomous Workflow Agent
-======================================================
-A production-grade demo of AI agent infrastructure: LangChain agent
-with Kafka event streaming, Prometheus metrics, and Kubernetes deployment.
+Agent Runtime — Autonomous Workflow Agent
+=========================================
+A reference implementation of enterprise AI agent infrastructure:
+LangChain agent with Kafka event streaming, Prometheus metrics,
+and Kubernetes deployment.
 
 Architecture:
   User Request → FastAPI → LangChain Agent → Kafka (events)
@@ -50,7 +51,7 @@ LATENCY = Histogram("ai_agent_latency_seconds", "Request latency", ["operation"]
 WORKFLOW_RUNS = Counter("ai_agent_workflow_runs_total", "Workflow executions", ["workflow_type"])
 
 # ─── App ───
-app = FastAPI(title="Rippling AI Platform — Agent Demo", version="1.0.0")
+app = FastAPI(title="Agent Runtime — Autonomous Workflow Agent", version="1.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 class AgentRequest(BaseModel):

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: agent
-          image: rippling-demo:latest
+          image: agent-runtime-demo:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
