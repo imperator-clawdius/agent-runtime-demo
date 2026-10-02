@@ -108,6 +108,8 @@ def test_default_configuration_never_initializes_external_clients_even_with_inhe
 
 
 def test_explicit_clients_start_and_close_in_lifespan_with_mocked_io_only():
+    from kafka import KafkaProducer
+    supported_options = set(KafkaProducer.DEFAULT_CONFIG)
     model = Mock(invoke=Mock(return_value=SimpleNamespace(content='Unverified claim: payroll completed')))
     publisher = Mock()
     settings = {'AGENT_MODE': 'llm_draft', 'OPENAI_API_KEY': 'mock-only',
@@ -124,6 +126,8 @@ def test_explicit_clients_start_and_close_in_lifespan_with_mocked_io_only():
         assert create_model.call_args.kwargs['max_retries'] == 0
         assert create_model.call_args.kwargs['timeout'] == 30
         assert create_publisher.call_args.kwargs['max_block_ms'] == 5000
+        assert create_publisher.call_args.kwargs['bootstrap_timeout_ms'] == 5000
+        assert set(create_publisher.call_args.kwargs) <= supported_options
         publisher.close.assert_called_once_with(timeout=5)
 
 

@@ -63,7 +63,7 @@ def configured_clients():
         publisher = KafkaProducer(
             bootstrap_servers=os.environ['KAFKA_BOOTSTRAP'],
             value_serializer=lambda value: json.dumps(value).encode('utf-8'),
-            max_block_ms=5000, request_timeout_ms=5000, api_version_auto_timeout_ms=5000,
+            max_block_ms=5000, request_timeout_ms=5000, bootstrap_timeout_ms=5000,
         )
     return mode, model, publisher
 
