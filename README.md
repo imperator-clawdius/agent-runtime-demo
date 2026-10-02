@@ -120,12 +120,16 @@ python -m pytest -q
 python -m pip check
 ```
 
-Tests use in-process HTTP clients and mocked model/Kafka clients. They cover truthful
+Pytest uses in-process HTTP clients and mocked model/Kafka clients. It covers truthful
 simulation/model/observation responses, supplied context, input validation, provider
 errors, broker acknowledgement versus failure, safe defaults, metrics and deployment
-configuration. No paid model calls, Kafka writes, business-system operations or
-deployments are performed. CI checks Python 3.11/3.12 on Windows/Linux, Compose
-configuration and the Docker image build; it does not validate a live broker or cluster.
+configuration. Pytest performs no paid model calls, Kafka writes, business-system
+operations or deployments. CI checks Python 3.11/3.12 on Windows/Linux and starts
+a disposable local Compose app/broker with simulation explicitly enabled. The
+bounded `tests/compose_smoke.py` check submits one synthetic draft and requires a
+real local broker acknowledgement; CI always removes its stack/volumes afterward.
+This validates the example's container startup and local event path, not any
+external Kafka deployment, model provider, consumer processing or Kubernetes rollout.
 
 Built by Teddy Alston - [teddyalston.com](https://teddyalston.com) -
 [GitHub](https://github.com/imperator-clawdius)

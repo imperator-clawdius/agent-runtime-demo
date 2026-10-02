@@ -23,7 +23,21 @@ jobs:
       - run: python -m pytest -q
   container:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AGENT_MODE: simulation
+      KAFKA_ENABLED: 'true'
+      OPENAI_API_KEY: ''
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config --quiet
-      - run: docker build -t agent-runtime-check .
+      - name: Start disposable local app and Kafka
+        run: docker compose -p agent-runtime-ci up --build --wait --wait-timeout 120 agent kafka
+      - name: Verify simulated draft and real local broker acknowledgement
+        run: python tests/compose_smoke.py
+      - name: Show bounded container diagnostics on failure
+        if: failure()
+        run: docker compose -p agent-runtime-ci logs --no-color --tail 60
+      - name: Remove disposable stack and volumes
+        if: always()
+        run: docker compose -p agent-runtime-ci down --volumes --remove-orphans
