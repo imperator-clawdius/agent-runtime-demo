@@ -1,0 +1,43 @@
+name: Reference checks
+on:
+  push:
+    branches: [master]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pip check
+      - run: python -m pytest -q
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AGENT_MODE: simulation
+      KAFKA_ENABLED: 'true'
+      OPENAI_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - name: Start disposable local app and Kafka
+        run: docker compose -p agent-runtime-ci up --build --wait --wait-timeout 120 agent kafka
+      - name: Verify simulated draft and real local broker acknowledgement
+        run: python tests/compose_smoke.py
+      - name: Show bounded container diagnostics on failure
+        if: failure()
+        run: docker compose -p agent-runtime-ci logs --no-color --tail 60
+      - name: Remove disposable stack and volumes
+        if: always()
+        run: docker compose -p agent-runtime-ci down --volumes --remove-orphans

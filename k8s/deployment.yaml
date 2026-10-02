@@ -16,18 +16,17 @@ spec:
     spec:
       containers:
         - name: agent
-          image: agent-runtime-demo:latest
+          image: agent-runtime-demo:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           env:
-            - name: KAFKA_BOOTSTRAP
-              value: "kafka-service:9092"
-            - name: OPENAI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: ai-agent-secrets
-                  key: openai-key
+            - name: HOST
+              value: "0.0.0.0"
+            - name: AGENT_MODE
+              value: "simulation"
+            - name: KAFKA_ENABLED
+              value: "false"
           resources:
             requests:
               memory: "256Mi"
@@ -54,4 +53,4 @@ spec:
   ports:
     - port: 80
       targetPort: 8000
-  type: LoadBalancer
+  type: ClusterIP
